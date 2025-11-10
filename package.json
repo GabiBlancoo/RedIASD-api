@@ -1,0 +1,42 @@
+{
+  "name": "rediasd-api",
+  "version": "1.0.0",
+  "description": "Plataforma web interna para la IASD que permite recomendar empleados, compartir CVs y solicitar referencias. Conecta talento adventista con oportunidades laborales dentro de la red institucional.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon --watch src --ext ts,json --exec ts-node src/app.ts",
+    "build": "tsc",
+    "start": "node dist/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GabiBlancoo/RedIASD-api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GabiBlancoo/RedIASD-api/issues"
+  },
+  "homepage": "https://github.com/GabiBlancoo/RedIASD-api#readme",
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/hapi__boom": "^7.4.1",
+    "@types/node": "^24.9.1",
+    "nodemon": "^3.1.0",
+    "prisma": "^6.18.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.0"
+  },
+  "dependencies": {
+    "@hapi/boom": "^10.0.1",
+    "@prisma/client": "^6.18.0",
+    "cors": "^2.8.5",
+    "express": "^5.1.0"
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  }
+}

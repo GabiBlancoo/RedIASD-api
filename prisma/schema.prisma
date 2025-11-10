@@ -1,0 +1,99 @@
+generator client {
+  provider = "prisma-client-js"
+    output   = "../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+model Rol {
+  Id_Rol     Int       @id @default(autoincrement())
+  Nombre     String    @db.VarChar(100)
+  usuarios   Usuario[]
+}
+
+model Entidad {
+  Id_Entidad Int       @id @default(autoincrement())
+  Nombre     String    @db.VarChar(100)
+  usuarios   Usuario[]
+  recomendaciones Recomendacion[]
+  desvinculaciones Desvinculacion[]
+}
+
+model Usuario {
+  Id_Usuario Int       @id @default(autoincrement())
+  Nombre     String    @db.VarChar(100)
+  Apellido   String    @db.VarChar(100)
+  Email      String    @db.VarChar(100)
+  Id_Entidad Int
+  Id_Rol     Int
+
+  entidad    Entidad   @relation(fields: [Id_Entidad], references: [Id_Entidad])
+  rol        Rol       @relation(fields: [Id_Rol], references: [Id_Rol])
+
+  recomendaciones Recomendacion[]
+}
+
+model Persona {
+  Id_Persona       Int       @id @default(autoincrement())
+  Nombre           String    @db.VarChar(100)
+  Apellido         String    @db.VarChar(100)
+  Dni              Int
+  Fecha_Nacimiento DateTime  @db.Date
+  Telefono         String    @db.VarChar(100)
+  Email            String
+
+  recomendaciones  Recomendacion[]
+  desvinculaciones Desvinculacion[]
+  curriculos       Curriculo[]
+}
+
+model Curriculo {
+  Id_Curriculo Int      @id @default(autoincrement())
+  Id_Persona   Int
+  Profesion    String   @db.VarChar(100)
+  Experiencia  String?
+  Adjunto_CV   String?
+
+  persona      Persona  @relation(fields: [Id_Persona], references: [Id_Persona])
+}
+
+model Recomendacion {
+  Id_Recomendacion     Int      @id @default(autoincrement())
+  Id_Persona           Int
+  Id_Entidad           Int
+  Id_Usuario           Int
+  Fecha_Recomendacion  DateTime @default(now()) @db.Date
+  Activo               Boolean  @default(true)
+  Perfil_Profesional   String?
+  Persona_Recomienda   String?
+  Email_Recomienda     String?
+  Telefono_Recomienda  String?
+
+  persona  Persona  @relation(fields: [Id_Persona], references: [Id_Persona])
+  entidad  Entidad  @relation(fields: [Id_Entidad], references: [Id_Entidad], onDelete: NoAction, onUpdate: NoAction)
+  usuario  Usuario @relation(fields: [Id_Usuario], references: [Id_Usuario])
+}
+
+
+model Motivo_Desvinculacion {
+  Id_Motivo        Int       @id @default(autoincrement())
+  Nombre           String    @db.VarChar(100)
+  desvinculaciones Desvinculacion[]
+}
+
+model Desvinculacion {
+  Id_Desvinculacion     Int      @id @default(autoincrement())
+  Id_Persona            Int
+  Id_Entidad            Int
+  Id_Motivo             Int
+  Persona_Referencia    String?
+  Email_Referencia      String?
+  Telefono_Referencia   String?
+
+  persona Persona  @relation(fields: [Id_Persona], references: [Id_Persona])
+  entidad Entidad  @relation(fields: [Id_Entidad], references: [Id_Entidad])
+  motivo  Motivo_Desvinculacion @relation(fields: [Id_Motivo], references: [Id_Motivo])
+}
